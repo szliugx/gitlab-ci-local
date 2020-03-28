@@ -37,7 +37,7 @@ RUN go env -w  GOPROXY=https://goproxy.cn
 RUN go get golang.org/x/lint
 RUN go install golang.org/x/lint
 
-COPY docker-latest.tgz docker-latest.tgz
+# COPY docker-latest.tgz docker-latest.tgz
 
 # install docker
 RUN curl -O https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
