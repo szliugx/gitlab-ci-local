@@ -1,4 +1,6 @@
-export VERSION=1.0.0
+# BUILD_TIME=`date +%Y%m%d%H%M%S`
+BUILD_TIME=$(shell date +"%Y%m%d%H%M%S")
+export VERSION=1.0.$(BUILD_TIME)
 export ENV=prod
 export PROJECT=gitlab-ci-local
 
@@ -8,7 +10,6 @@ SOURCE_BINARY_DIR=$(TOPDIR)/bin
 SOURCE_BINARY_FILE=$(SOURCE_BINARY_DIR)/$(PROJECT)
 SOURCE_MAIN_FILE=$(TOPDIR)/cmd/main.go
 
-BUILD_TIME=`date +%Y%m%d%H%M%S`
 BUILD_FLAG=-ldflags "-X main.version=$(VERSION) -X main.buildTime=$(BUILD_TIME)"
 
 all: build pack
@@ -27,4 +28,10 @@ build:
 pack:
 	@echo "\n\rpacking...."
 	@ls -lh $(SOURCE_BINARY_DIR)
-	@docker build -t $(PROJECT) .
+	@docker build -t $(PROJECT):$(VERSION) .
+	@docker images
+	@docker login -u 17097219012 -p l1234567890-  registry.cn-shenzhen.aliyuncs.com
+	@docker tag $(PROJECT):$(VERSION)  registry.cn-shenzhen.aliyuncs.com/duct/web_test:$(VERSION)
+	@docker push  registry.cn-shenzhen.aliyuncs.com/duct/web_test:$(VERSION)
+	@docker rmi  registry.cn-shenzhen.aliyuncs.com/duct/web_test:$(VERSION)
+	# @docker rmi $(PROJECT):$(VERSION)

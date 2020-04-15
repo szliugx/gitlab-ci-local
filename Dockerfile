@@ -1,5 +1,7 @@
 # 基础镜像是 docker 仓库的 busybox
 FROM alpine as certs
+# 更新安装源
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk update && apk add ca-certificates
 # 从别的镜像中 copy 证书
 FROM busybox
